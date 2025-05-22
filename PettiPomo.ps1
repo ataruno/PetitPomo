@@ -1,6 +1,17 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Load settings from config.json
+$configPath = Join-Path -Path (Get-Location) -ChildPath "config.json"
+if (Test-Path $configPath) {
+    $json = Get-Content $configPath -Raw | ConvertFrom-Json
+    $Script:notifyOnRest = $json.NotifyOnRest
+    $Script:enableCsvLogging = $json.EnableCsvLogging
+} else {
+    $Script:notifyOnRest = $false
+    $Script:enableCsvLogging = $false
+}
+
 # Create main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Pomodoro Timer"
@@ -81,8 +92,6 @@ $timer.Interval = 1000
 $Script:phase = ""
 $Script:timeLeft = 0
 $Script:running = $false
-$Script:notifyOnRest = $false
-$Script:enableCsvLogging = $false
 
 $Script:logData = @{
     Date = ""
@@ -92,7 +101,6 @@ $Script:logData = @{
     RestEnd = ""
 }
 
-# Functions
 function UpdateCountdownLabel {
     $minutes = [int][math]::Floor($Script:timeLeft / 60)
     $seconds = [int]$Script:timeLeft % 60
@@ -266,25 +274,22 @@ function ShowSettingsForm {
     $chkLog.Checked = $Script:enableCsvLogging
     $settingsForm.Controls.Add($chkLog)
 
-    $btnOK = New-Object System.Windows.Forms.Button
-    $btnOK.Text = "OK"
-    $btnOK.Location = New-Object System.Drawing.Point(50,110)
-    $btnOK.Size = New-Object System.Drawing.Size(60,30)
-    $settingsForm.Controls.Add($btnOK)
-
-    $btnCancel = New-Object System.Windows.Forms.Button
-    $btnCancel.Text = "Cancel"
-    $btnCancel.Location = New-Object System.Drawing.Point(150,110)
-    $btnCancel.Size = New-Object System.Drawing.Size(60,30)
-    $settingsForm.Controls.Add($btnCancel)
-
-    $btnOK.Add_Click({
+    $btnSave = New-Object System.Windows.Forms.Button
+    $btnSave.Text = "Save"
+    $btnSave.Location = New-Object System.Drawing.Point(100,100)
+    $btnSave.Size = New-Object System.Drawing.Size(75,23)
+    $btnSave.Add_Click({
         $Script:notifyOnRest = $chkNotify.Checked
         $Script:enableCsvLogging = $chkLog.Checked
+        $settings = @{
+            NotifyOnRest = $Script:notifyOnRest
+            EnableCsvLogging = $Script:enableCsvLogging
+        }
+        $settings | ConvertTo-Json -Depth 3 | Set-Content -Encoding UTF8 $configPath
         $settingsForm.Close()
     })
+    $settingsForm.Controls.Add($btnSave)
 
-    $btnCancel.Add_Click({ $settingsForm.Close() })
     $settingsForm.ShowDialog()
 }
 
