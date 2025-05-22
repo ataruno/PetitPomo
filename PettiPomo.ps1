@@ -19,7 +19,7 @@ $form.Controls.Add($menuStrip)
 $menuSettings = New-Object System.Windows.Forms.ToolStripMenuItem "Settings"
 $menuStrip.Items.Add($menuSettings)
 
-# NotifyIcon for tray notifications
+# NotifyIcon
 $notifyIcon = New-Object System.Windows.Forms.NotifyIcon
 $notifyIcon.Icon = [System.Drawing.SystemIcons]::Information
 $notifyIcon.Visible = $false
@@ -82,9 +82,17 @@ $Script:phase = ""
 $Script:timeLeft = 0
 $Script:running = $false
 $Script:notifyOnRest = $false
+$Script:enableCsvLogging = $false
+
+$Script:logData = @{
+    Date = ""
+    WorkStart = ""
+    WorkEnd = ""
+    RestStart = ""
+    RestEnd = ""
+}
 
 # Functions
-
 function UpdateCountdownLabel {
     $minutes = [int][math]::Floor($Script:timeLeft / 60)
     $seconds = [int]$Script:timeLeft % 60
@@ -126,7 +134,9 @@ function SetPhaseTime {
                 return $false
             }
             $Script:timeLeft = [int]($workMin * 60)
-            $form.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193) # LightPink
+            $form.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193)
+            $Script:logData.WorkStart = (Get-Date).ToString("HH:mm:ss")
+            $Script:logData.Date = (Get-Date).ToString("yyyy-MM-dd")
         }
         "rest" {
             $restMin = ValidatePositiveNumber $textRest.Text
@@ -135,13 +145,25 @@ function SetPhaseTime {
                 return $false
             }
             $Script:timeLeft = [int]($restMin * 60)
-            $form.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144) # LightGreen
+            $form.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144)
+            $Script:logData.WorkEnd = (Get-Date).ToString("HH:mm:ss")
+            $Script:logData.RestStart = (Get-Date).ToString("HH:mm:ss")
         }
         default {
             return $false
         }
     }
     return $true
+}
+
+function LogSessionToCsv {
+    $Script:logData.RestEnd = (Get-Date).ToString("HH:mm:ss")
+    $line = "{0},{1},{2},{3},{4}," -f $Script:logData.Date, $Script:logData.WorkStart, $Script:logData.WorkEnd, $Script:logData.RestStart, $Script:logData.RestEnd
+    $logFile = Join-Path -Path (Get-Location) -ChildPath "pomodoro_log.csv"
+    if (-not (Test-Path $logFile)) {
+        "Date,WorkStart,WorkEnd,RestStart,RestEnd,Memo" | Out-File -FilePath $logFile -Encoding UTF8
+    }
+    $line | Out-File -FilePath $logFile -Append -Encoding UTF8
 }
 
 function ShowRestNotification {
@@ -180,13 +202,17 @@ $timer.Add_Tick({
         $Script:timeLeft--
         UpdateCountdownLabel
     } else {
-        # Switch phase
+        if ($Script:phase -eq "rest") {
+            if ($Script:enableCsvLogging) {
+                LogSessionToCsv
+            }
+        }
+
         $Script:phase = if ($Script:phase -eq "work") { "rest" } else { "work" }
 
-        # Show notification depending on phase
         if ($Script:phase -eq "rest") {
             ShowRestNotification
-        } elseif ($Script:phase -eq "work") {
+        } else {
             ShowWorkNotification
         }
 
@@ -197,18 +223,8 @@ $timer.Add_Tick({
     }
 })
 
-$buttonStart.Add_Click({
-    if (-not $Script:running) {
-        StartTimer
-    }
-})
-
-$buttonStop.Add_Click({
-    $timer.Stop()
-    $Script:running = $false
-    UpdateLabelFonts
-})
-
+$buttonStart.Add_Click({ if (-not $Script:running) { StartTimer } })
+$buttonStop.Add_Click({ $timer.Stop(); $Script:running = $false; UpdateLabelFonts })
 $buttonReset.Add_Click({
     $timer.Stop()
     $Script:running = $false
@@ -229,7 +245,7 @@ $form.Add_Shown({
 function ShowSettingsForm {
     $settingsForm = New-Object System.Windows.Forms.Form
     $settingsForm.Text = "Settings"
-    $settingsForm.Size = New-Object System.Drawing.Size(270,150)
+    $settingsForm.Size = New-Object System.Drawing.Size(280,180)
     $settingsForm.StartPosition = "CenterParent"
     $settingsForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     $settingsForm.MaximizeBox = $false
@@ -243,32 +259,35 @@ function ShowSettingsForm {
     $chkNotify.Checked = $Script:notifyOnRest
     $settingsForm.Controls.Add($chkNotify)
 
+    $chkLog = New-Object System.Windows.Forms.CheckBox
+    $chkLog.Text = "Log session to CSV"
+    $chkLog.Location = New-Object System.Drawing.Point(20,60)
+    $chkLog.AutoSize = $true
+    $chkLog.Checked = $Script:enableCsvLogging
+    $settingsForm.Controls.Add($chkLog)
+
     $btnOK = New-Object System.Windows.Forms.Button
     $btnOK.Text = "OK"
-    $btnOK.Location = New-Object System.Drawing.Point(50,80)
+    $btnOK.Location = New-Object System.Drawing.Point(50,110)
     $btnOK.Size = New-Object System.Drawing.Size(60,30)
     $settingsForm.Controls.Add($btnOK)
 
     $btnCancel = New-Object System.Windows.Forms.Button
     $btnCancel.Text = "Cancel"
-    $btnCancel.Location = New-Object System.Drawing.Point(150,80)
+    $btnCancel.Location = New-Object System.Drawing.Point(150,110)
     $btnCancel.Size = New-Object System.Drawing.Size(60,30)
     $settingsForm.Controls.Add($btnCancel)
 
     $btnOK.Add_Click({
         $Script:notifyOnRest = $chkNotify.Checked
+        $Script:enableCsvLogging = $chkLog.Checked
         $settingsForm.Close()
     })
 
-    $btnCancel.Add_Click({
-        $settingsForm.Close()
-    })
-
+    $btnCancel.Add_Click({ $settingsForm.Close() })
     $settingsForm.ShowDialog()
 }
 
-$menuSettings.Add_Click({
-    ShowSettingsForm
-})
+$menuSettings.Add_Click({ ShowSettingsForm })
 
 [void]$form.ShowDialog()
