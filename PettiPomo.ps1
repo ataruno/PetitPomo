@@ -14,7 +14,7 @@ if (Test-Path $configPath) {
 
 # Create main form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Pomodoro Timer"
+$form.Text = "PettiPomo"
 $form.Size = New-Object System.Drawing.Size(200,180)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
