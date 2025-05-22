@@ -81,7 +81,7 @@ $timer.Interval = 1000
 $Script:phase = ""
 $Script:timeLeft = 0
 $Script:running = $false
-$Script:notifyOnRest = $true
+$Script:notifyOnRest = $false
 
 # Functions
 
