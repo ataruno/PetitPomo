@@ -81,7 +81,7 @@ $timer.Interval = 1000
 $Script:phase = ""
 $Script:timeLeft = 0
 $Script:running = $false
-$Script:notifyOnRest = $flase
+$Script:notifyOnRest = $true
 
 # Functions
 
@@ -152,6 +152,14 @@ function ShowRestNotification {
     $notifyIcon.ShowBalloonTip(3000)
 }
 
+function ShowWorkNotification {
+    if (-not $Script:notifyOnRest) { return }
+    $notifyIcon.BalloonTipTitle = "Work Time"
+    $notifyIcon.BalloonTipText = "Work time! Let's focus."
+    $notifyIcon.Visible = $true
+    $notifyIcon.ShowBalloonTip(3000)
+}
+
 function StartTimer {
     if ($timer.Enabled) { return }
     if ([string]::IsNullOrEmpty($Script:phase)) {
@@ -172,10 +180,14 @@ $timer.Add_Tick({
         $Script:timeLeft--
         UpdateCountdownLabel
     } else {
+        # Switch phase
         $Script:phase = if ($Script:phase -eq "work") { "rest" } else { "work" }
 
+        # Show notification depending on phase
         if ($Script:phase -eq "rest") {
             ShowRestNotification
+        } elseif ($Script:phase -eq "work") {
+            ShowWorkNotification
         }
 
         if (SetPhaseTime) {
