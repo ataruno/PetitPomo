@@ -2,7 +2,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # Load settings from config.json
-$configPath = Join-Path -Path (Get-Location) -ChildPath "config.json"
+$configPath = Join-Path -Path (Get-Location) -ChildPath "PettiPomo_config.json"
 if (Test-Path $configPath) {
     $json = Get-Content $configPath -Raw | ConvertFrom-Json
     $Script:notifyOnRest = $json.NotifyOnRest
@@ -295,4 +295,5 @@ function ShowSettingsForm {
 
 $menuSettings.Add_Click({ ShowSettingsForm })
 
-[void]$form.ShowDialog()
+$form.ShowDialog() | Out-Null
+exit 0
