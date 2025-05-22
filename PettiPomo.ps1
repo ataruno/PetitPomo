@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.Drawing
 # Create main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Pomodoro Timer"
-$form.Size = New-Object System.Drawing.Size(300,230)
+$form.Size = New-Object System.Drawing.Size(200,180)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.MaximizeBox = $false
@@ -26,52 +26,52 @@ $notifyIcon.Visible = $false
 
 # UI Controls
 $labelWork = New-Object System.Windows.Forms.Label
-$labelWork.Text = "Work (minutes):"
-$labelWork.Location = New-Object System.Drawing.Point(10,50)
+$labelWork.Text = "Work(min):"
+$labelWork.Location = New-Object System.Drawing.Point(10,30)
 $labelWork.AutoSize = $true
 $form.Controls.Add($labelWork)
 
 $textWork = New-Object System.Windows.Forms.TextBox
-$textWork.Location = New-Object System.Drawing.Point(110,48)
+$textWork.Location = New-Object System.Drawing.Point(90,30)
 $textWork.Size = New-Object System.Drawing.Size(50,20)
 $textWork.Text = "25"
 $form.Controls.Add($textWork)
 
 $labelRest = New-Object System.Windows.Forms.Label
-$labelRest.Text = "Rest (minutes):"
-$labelRest.Location = New-Object System.Drawing.Point(10,80)
+$labelRest.Text = "Rest(min):"
+$labelRest.Location = New-Object System.Drawing.Point(10,50)
 $labelRest.AutoSize = $true
 $form.Controls.Add($labelRest)
 
 $textRest = New-Object System.Windows.Forms.TextBox
-$textRest.Location = New-Object System.Drawing.Point(110,78)
+$textRest.Location = New-Object System.Drawing.Point(90,50)
 $textRest.Size = New-Object System.Drawing.Size(50,20)
 $textRest.Text = "5"
 $form.Controls.Add($textRest)
 
 $buttonStart = New-Object System.Windows.Forms.Button
 $buttonStart.Text = "Start"
-$buttonStart.Location = New-Object System.Drawing.Point(20,110)
-$buttonStart.Size = New-Object System.Drawing.Size(60,30)
+$buttonStart.Location = New-Object System.Drawing.Point(10,75)
+$buttonStart.Size = New-Object System.Drawing.Size(50,30)
 $form.Controls.Add($buttonStart)
 
 $buttonStop = New-Object System.Windows.Forms.Button
 $buttonStop.Text = "Stop"
-$buttonStop.Location = New-Object System.Drawing.Point(100,110)
-$buttonStop.Size = New-Object System.Drawing.Size(60,30)
+$buttonStop.Location = New-Object System.Drawing.Point(65,75)
+$buttonStop.Size = New-Object System.Drawing.Size(50,30)
 $form.Controls.Add($buttonStop)
 
 $buttonReset = New-Object System.Windows.Forms.Button
 $buttonReset.Text = "Reset"
-$buttonReset.Location = New-Object System.Drawing.Point(180,110)
-$buttonReset.Size = New-Object System.Drawing.Size(60,30)
+$buttonReset.Location = New-Object System.Drawing.Point(120,75)
+$buttonReset.Size = New-Object System.Drawing.Size(50,30)
 $form.Controls.Add($buttonReset)
 
 $labelCountdown = New-Object System.Windows.Forms.Label
 $labelCountdown.Text = "00:00"
 $labelCountdown.Font = New-Object System.Drawing.Font("Arial",20,[System.Drawing.FontStyle]::Bold)
 $labelCountdown.AutoSize = $true
-$labelCountdown.Location = New-Object System.Drawing.Point(100,150)
+$labelCountdown.Location = New-Object System.Drawing.Point(50,110)
 $form.Controls.Add($labelCountdown)
 
 # Timer and state variables
