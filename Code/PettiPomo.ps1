@@ -18,6 +18,7 @@ $form.Text = "PettiPomo"
 $form.Size = New-Object System.Drawing.Size(200,180)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+$form.TopMost = $true
 $form.MaximizeBox = $false
 $form.MinimizeBox = $false
 $form.ControlBox = $true
@@ -259,6 +260,7 @@ function ShowSettingsForm {
     $settingsForm.MaximizeBox = $false
     $settingsForm.MinimizeBox = $false
     $settingsForm.ControlBox = $true
+    $settingsForm.TopMost = $true
 
     $chkNotify = New-Object System.Windows.Forms.CheckBox
     $chkNotify.Text = "Show rest time notification"
