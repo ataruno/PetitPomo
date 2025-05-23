@@ -1,4 +1,3 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -28,7 +27,6 @@ $form.Size = New-Object System.Drawing.Size(110,145)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.BackColor = [System.Drawing.Color]::LightGray
-$menuStrip.BackColor = [System.Drawing.Color]::LightGray
 $form.TopMost = $true
 $form.MaximizeBox = $false
 $form.MinimizeBox = $false
@@ -42,8 +40,7 @@ $menuStrip.Location = New-Object System.Drawing.Point(110, 45)
 $menuStrip.Size = New-Object System.Drawing.Size(50, 24)
 $form.MainMenuStrip = $menuStrip
 $form.Controls.Add($menuStrip)
-# $symbolFont = New-Object System.Drawing.Font("Segoe UI", 11,[System.Drawing.FontStyle]::Bold)
-$symbolFont = New-Object System.Drawing.Font("Segoe UI", 10)
+$symbolFont = New-Object System.Drawing.Font("Segoe UI", 10,[System.Drawing.FontStyle]::Bold)
 $menuSettings = New-Object System.Windows.Forms.ToolStripMenuItem "..."
 $menuSettings.Font = $symbolFont
 $menuStrip.Items.Add($menuSettings)
@@ -55,7 +52,7 @@ $notifyIcon.Visible = $false
 
 # UI Controls
 $labelWork = New-Object System.Windows.Forms.Label
-$labelWork.Text = "Work(min):"
+$labelWork.Text = "Work (min)"
 $labelWork.Location = New-Object System.Drawing.Point(10,2)
 $labelWork.AutoSize = $true
 $form.Controls.Add($labelWork)
@@ -68,7 +65,7 @@ $textWork.Text = "25"
 $form.Controls.Add($textWork)
 
 $labelRest = New-Object System.Windows.Forms.Label
-$labelRest.Text = "Rest(min):"
+$labelRest.Text = "Rest (min)"
 $labelRest.Location = New-Object System.Drawing.Point(10,22)
 $labelRest.AutoSize = $true
 $form.Controls.Add($labelRest)
@@ -149,13 +146,10 @@ function ValidatePositiveNumber($text) {
 }
 
 function SetPhaseTime {
+    $workMin = ValidatePositiveNumber $textWork.Text
+    $restMin = ValidatePositiveNumber $textRest.Text
     switch ($Script:phase) {
         "work" {
-            $workMin = ValidatePositiveNumber $textWork.Text
-            if (-not $workMin) {
-                [System.Windows.Forms.MessageBox]::Show("Work time must be a positive number.")
-                return $false
-            }
             $Script:timeLeft = [int]($workMin * 60)
             $form.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193)
             $menuStrip.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193)
@@ -163,11 +157,6 @@ function SetPhaseTime {
             $Script:logData.Date = (Get-Date).ToString("yyyy-MM-dd")
         }
         "rest" {
-            $restMin = ValidatePositiveNumber $textRest.Text
-            if (-not $restMin) {
-                [System.Windows.Forms.MessageBox]::Show("Rest time must be a positive number.")
-                return $false
-            }
             $Script:timeLeft = [int]($restMin * 60)
             $form.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144)
             $menuStrip.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144)
@@ -261,7 +250,25 @@ $buttonReset.Add_Click({
 })
 
 $buttonStart.Add_Click({
-    if (-not $Script:running) {
+    $workMin = ValidatePositiveNumber $textWork.Text
+    $restMin = ValidatePositiveNumber $textRest.Text
+    if (-not $workMin) {
+        [System.Windows.Forms.MessageBox]::Show("Work time must be a positive number.")
+        return $false
+    }
+    elseif ($workMin -gt 999) {
+        [System.Windows.Forms.MessageBox]::Show("Work time must be a positive number less than 1000[min].")
+        return $false
+    }
+    elseif (-not $restMin) {
+        [System.Windows.Forms.MessageBox]::Show("Rest time must be a positive number.")
+        return $false
+    }
+    elseif ($restMin -gt 999) {
+        [System.Windows.Forms.MessageBox]::Show("Rest time must be a positive number less than 1000[min].")
+        return $false
+    }
+    elseif (-not $Script:running) {
         if ([string]::IsNullOrEmpty($Script:phase)) {
             $Script:phase = "work"
         }
@@ -341,4 +348,4 @@ function ShowSettingsForm {
 $menuSettings.Add_Click({ ShowSettingsForm })
 
 $form.ShowDialog() | Out-Null
-exit
+exit 0
