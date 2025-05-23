@@ -301,21 +301,21 @@ function ShowSettingsForm {
 
     $chkNotify = New-Object System.Windows.Forms.CheckBox
     $chkNotify.Text = "Show rest time notification"
-    $chkNotify.Location = New-Object System.Drawing.Point(20,30)
+    $chkNotify.Location = New-Object System.Drawing.Point(20,20)
     $chkNotify.AutoSize = $true
     $chkNotify.Checked = $Script:notifyOnRest
     $settingsForm.Controls.Add($chkNotify)
 
     $chkLog = New-Object System.Windows.Forms.CheckBox
     $chkLog.Text = "Log session to CSV"
-    $chkLog.Location = New-Object System.Drawing.Point(20,60)
+    $chkLog.Location = New-Object System.Drawing.Point(20,50)
     $chkLog.AutoSize = $true
     $chkLog.Checked = $Script:enableCsvLogging
     $settingsForm.Controls.Add($chkLog)
 
     $btnSave = New-Object System.Windows.Forms.Button
     $btnSave.Text = "Save"
-    $btnSave.Location = New-Object System.Drawing.Point(100,100)
+    $btnSave.Location = New-Object System.Drawing.Point(100,80)
     $btnSave.Size = New-Object System.Drawing.Size(75,23)
     $btnSave.Add_Click({
         $Script:notifyOnRest = $chkNotify.Checked
@@ -328,6 +328,12 @@ function ShowSettingsForm {
         $settingsForm.Close()
     })
     $settingsForm.Controls.Add($btnSave)
+
+    $LabelMaker = New-Object System.Windows.Forms.Label
+    $LabelMaker.Text = "designed by ataruno"
+    $LabelMaker.Location = New-Object System.Drawing.Point(145,120)
+    $LabelMaker.Size = New-Object System.Drawing.Size(200,50)
+    $settingsForm.Controls.Add($LabelMaker)
 
     $settingsForm.ShowDialog()
 }
