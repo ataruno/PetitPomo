@@ -1,3 +1,4 @@
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -23,9 +24,11 @@ if (Test-Path $configPath) {
 # Create main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "PettiPomo"
-$form.Size = New-Object System.Drawing.Size(200,180)
+$form.Size = New-Object System.Drawing.Size(110,145)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+$form.BackColor = [System.Drawing.Color]::LightGray
+$menuStrip.BackColor = [System.Drawing.Color]::LightGray
 $form.TopMost = $true
 $form.MaximizeBox = $false
 $form.MinimizeBox = $false
@@ -34,10 +37,15 @@ $form.Icon = $icon
 
 # Menu strip
 $menuStrip = New-Object System.Windows.Forms.MenuStrip
+$menuStrip.Dock = [System.Windows.Forms.DockStyle]::None
+$menuStrip.Location = New-Object System.Drawing.Point(110, 45)
+$menuStrip.Size = New-Object System.Drawing.Size(50, 24)
 $form.MainMenuStrip = $menuStrip
 $form.Controls.Add($menuStrip)
-
-$menuSettings = New-Object System.Windows.Forms.ToolStripMenuItem "Settings"
+# $symbolFont = New-Object System.Drawing.Font("Segoe UI", 11,[System.Drawing.FontStyle]::Bold)
+$symbolFont = New-Object System.Drawing.Font("Segoe UI", 10)
+$menuSettings = New-Object System.Windows.Forms.ToolStripMenuItem "..."
+$menuSettings.Font = $symbolFont
 $menuStrip.Items.Add($menuSettings)
 
 # NotifyIcon
@@ -48,51 +56,50 @@ $notifyIcon.Visible = $false
 # UI Controls
 $labelWork = New-Object System.Windows.Forms.Label
 $labelWork.Text = "Work(min):"
-$labelWork.Location = New-Object System.Drawing.Point(10,30)
+$labelWork.Location = New-Object System.Drawing.Point(10,2)
 $labelWork.AutoSize = $true
 $form.Controls.Add($labelWork)
 
 $textWork = New-Object System.Windows.Forms.TextBox
-$textWork.Location = New-Object System.Drawing.Point(90,30)
-$textWork.Size = New-Object System.Drawing.Size(50,20)
+$textWork.BorderStyle
+$textWork.Location = New-Object System.Drawing.Point(90,2)
+$textWork.Size = New-Object System.Drawing.Size(40,20)
 $textWork.Text = "25"
 $form.Controls.Add($textWork)
 
 $labelRest = New-Object System.Windows.Forms.Label
 $labelRest.Text = "Rest(min):"
-$labelRest.Location = New-Object System.Drawing.Point(10,50)
+$labelRest.Location = New-Object System.Drawing.Point(10,22)
 $labelRest.AutoSize = $true
 $form.Controls.Add($labelRest)
 
 $textRest = New-Object System.Windows.Forms.TextBox
-$textRest.Location = New-Object System.Drawing.Point(90,50)
-$textRest.Size = New-Object System.Drawing.Size(50,20)
+$textRest.Location = New-Object System.Drawing.Point(90,22)
+$textRest.Size = New-Object System.Drawing.Size(40,20)
 $textRest.Text = "5"
 $form.Controls.Add($textRest)
 
 $buttonStart = New-Object System.Windows.Forms.Button
 $buttonStart.Text = "Start"
-$buttonStart.Location = New-Object System.Drawing.Point(10,75)
-$buttonStart.Size = New-Object System.Drawing.Size(50,30)
+$buttonStart.FlatStyle = 'Popup'
+$buttonStart.Location = New-Object System.Drawing.Point(8,46)
+$buttonStart.Size = New-Object System.Drawing.Size(50,25)
 $form.Controls.Add($buttonStart)
-
-$buttonStop = New-Object System.Windows.Forms.Button
-$buttonStop.Text = "Stop"
-$buttonStop.Location = New-Object System.Drawing.Point(65,75)
-$buttonStop.Size = New-Object System.Drawing.Size(50,30)
-$form.Controls.Add($buttonStop)
 
 $buttonReset = New-Object System.Windows.Forms.Button
 $buttonReset.Text = "Reset"
-$buttonReset.Location = New-Object System.Drawing.Point(120,75)
-$buttonReset.Size = New-Object System.Drawing.Size(50,30)
+$buttonReset.FlatStyle = 'Popup'
+$buttonReset.Location = New-Object System.Drawing.Point(65,46)
+$buttonReset.Size = New-Object System.Drawing.Size(45,25)
 $form.Controls.Add($buttonReset)
 
 $labelCountdown = New-Object System.Windows.Forms.Label
 $labelCountdown.Text = "00:00"
-$labelCountdown.Font = New-Object System.Drawing.Font("Arial",20,[System.Drawing.FontStyle]::Bold)
-$labelCountdown.AutoSize = $true
-$labelCountdown.Location = New-Object System.Drawing.Point(50,110)
+$labelCountdown.Font = New-Object System.Drawing.Font("Segoe UI",22,[System.Drawing.FontStyle]::Bold)
+$labelCountdown.Location = New-Object System.Drawing.Point(20,62)
+$labelCountdown.Size = New-Object System.Drawing.Size(120,50)
+$labelCountdown.TextAlign = 'MiddleCenter'
+$labelCountdown.AutoSize = $false
 $form.Controls.Add($labelCountdown)
 
 # Timer and state variables
@@ -119,12 +126,10 @@ function UpdateCountdownLabel {
 }
 
 function UpdateLabelFonts {
-    $normalFont = New-Object System.Drawing.Font("Arial",10,[System.Drawing.FontStyle]::Regular)
-    $boldFont = New-Object System.Drawing.Font("Arial",10,[System.Drawing.FontStyle]::Bold)
-
+    $normalFont = New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Regular)
+    $boldFont = New-Object System.Drawing.Font("Segoe UI",9,[System.Drawing.FontStyle]::Bold)
     $labelWork.Font = $normalFont
     $labelRest.Font = $normalFont
-
     if ($Script:running) {
         switch ($Script:phase) {
             "work" { $labelWork.Font = $boldFont }
@@ -153,6 +158,7 @@ function SetPhaseTime {
             }
             $Script:timeLeft = [int]($workMin * 60)
             $form.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193)
+            $menuStrip.BackColor = [System.Drawing.Color]::FromArgb(255,255,182,193)
             $Script:logData.WorkStart = (Get-Date).ToString("HH:mm:ss")
             $Script:logData.Date = (Get-Date).ToString("yyyy-MM-dd")
         }
@@ -164,6 +170,7 @@ function SetPhaseTime {
             }
             $Script:timeLeft = [int]($restMin * 60)
             $form.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144)
+            $menuStrip.BackColor = [System.Drawing.Color]::FromArgb(255,144,238,144)
             $Script:logData.WorkEnd = (Get-Date).ToString("HH:mm:ss")
             $Script:logData.RestStart = (Get-Date).ToString("HH:mm:ss")
         }
@@ -241,21 +248,42 @@ $timer.Add_Tick({
     }
 })
 
-$buttonStart.Add_Click({ if (-not $Script:running) { StartTimer } })
-$buttonStop.Add_Click({ $timer.Stop(); $Script:running = $false; UpdateLabelFonts })
 $buttonReset.Add_Click({
     $timer.Stop()
     $Script:running = $false
     $Script:phase = ""
-    $form.BackColor = [System.Drawing.Color]::White
+    $form.BackColor = [System.Drawing.Color]::WhiteSmoke
+    $menuStrip.BackColor = [System.Drawing.Color]::WhiteSmoke
     $Script:timeLeft = 0
     $labelCountdown.Text = "00:00"
+    $buttonStart.Text = "Start"
+    UpdateLabelFonts
+})
+
+$buttonStart.Add_Click({
+    if (-not $Script:running) {
+        if ([string]::IsNullOrEmpty($Script:phase)) {
+            $Script:phase = "work"
+        }
+        if ($Script:timeLeft -le 0) {
+            if (-not (SetPhaseTime)) { return }
+            UpdateCountdownLabel
+        }
+        $timer.Start()
+        $Script:running = $true
+        $buttonStart.Text = "Stop"
+    } else {
+        $timer.Stop()
+        $Script:running = $false
+        $buttonStart.Text = "Start"
+    }
     UpdateLabelFonts
 })
 
 $form.Add_Shown({
     $Script:phase = ""
-    $form.BackColor = [System.Drawing.Color]::White
+    $form.BackColor = [System.Drawing.Color]::WhiteSmoke
+    $menuStrip.BackColor = [System.Drawing.Color]::WhiteSmoke
     $labelCountdown.Text = "00:00"
     UpdateLabelFonts
 })
@@ -307,4 +335,4 @@ function ShowSettingsForm {
 $menuSettings.Add_Click({ ShowSettingsForm })
 
 $form.ShowDialog() | Out-Null
-exit 0
+exit
