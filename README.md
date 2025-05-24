@@ -7,6 +7,8 @@ It automatically switches between Work and Rest periods to help you stay focused
 PetitPomo（プティポモ）は、シンプルで小さなポモドーロタイマーです。  
 作業(Work)と休憩(Rest)を自動で切り替え、集中力の維持をサポートします。  
 
+![](./README_image/PetitPomo01.mp4)
+
 # English
 ## Features
 - Automatically loops between Work and Rest sessions, with optional pause.  
