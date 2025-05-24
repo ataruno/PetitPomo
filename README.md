@@ -32,8 +32,7 @@ PetitPomo（プティポモ）は、シンプルで小さなポモドーロタ�
 OS: Windows 10 / 11  
 
 ## License
-This software is released under the MIT License.  
-See the included `LICENSE.txt` file for details.  
+This software is released under the [MIT License](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file).  
 
 ## GitHub
 https://github.com/ataruno/PetitPomo  
@@ -69,8 +68,8 @@ A PowerShell version with similar features is also included.
 OS：Windows 10 / 11  
 
 ## ライセンス
-本ソフトウェアはMITライセンスのもとで公開されています。  
-詳細は同梱の `LICENSE.txt` をご参照ください。  
+本ソフトウェアは[MITライセンス](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file)のもとで公開されています。  
+
 
 ## Githubリンク
 https://github.com/ataruno/PetitPomo  
