@@ -20,7 +20,7 @@ It automatically switches between Work and Rest periods to help you stay focused
 
 ## Settings
 - Click […] to open the settings window.
-- Your preferences are saved in the `PetitPomo_config.json` file.
+- Settings are saved in PetitPomo_config.json (the file is automatically created if it does not exist).
 - Enable "Notify on Rest/Work" to show a 5-second popup notification when each session ends.
 - Enable "Enable CSV logging" to automatically export logs to `PetitPomo_log.csv` at the end of each Rest session.
 

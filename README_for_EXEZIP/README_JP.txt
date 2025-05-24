@@ -20,7 +20,7 @@ PetitPomo（プティポモ）は、シンプルで小さなポモドーロタ�
 
 ## 設定
 - […]をクリックすると設定画面が開きます。
-- 設定内容は'PettiPomo_config.json'に保存されます。
+- 設定内容は 'PetitPomo_config.json' に保存されます（ファイルがない場合は自動で生成されます）。
 - 「Notify on Rest/Work」にチェックを入れると、各時間終了時にポップアップ通知が5秒間表示されます。
 - 「Enable CSV logging」にチェックを入れると、Rest 終了時に `PetitPomo_log.csv` へログが出力されます。
 
