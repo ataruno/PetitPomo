@@ -15,6 +15,9 @@ PetitPomo（プティポモ）は、シンプルで小さなポモドーロタ�
 - Option to export Pomodoro logs as a CSV file.  
 - You can navigate between input fields and buttons using the Tab key.  
 
+## How to Download
+Download PetitPomo.zip from the [Releases page](https://github.com/ataruno/PetitPomo/releases) on GitHub, and extract it anywhere you like.  
+
 ## How to Use
 1. Double-click `PetitPomo.exe` to launch the application.  
 2. Enter the duration (in minutes) for Work and Rest sessions.  
@@ -49,6 +52,9 @@ The [PowerShellScript version](https://github.com/ataruno/PetitPomo/tree/main/Co
 - Work/Restの終わりに通知のポップアップ可能(ON/OFF切替可能)。  
 - ポモドーロのログをcsvで出力可能(ON/OFF切替可能)。  
 - Tabキーで入力フォームやボタン間のフォーカス移動可能。  
+
+## ダウンロード方法
+GitHubの[Releaseページ](https://github.com/ataruno/PetitPomo/releases)から'PetitPomo.zip'をダウンロードして、好きな場所で解凍してください。
 
 ## 使い方
 1. PetitPomo.exeをダブルクリックで実行。  
