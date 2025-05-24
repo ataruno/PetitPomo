@@ -334,7 +334,7 @@ class PetitPomoApp(tk.Tk):
         cb2.bind("<Return>", lambda e: cb2.invoke())
         btn.bind("<Return>", on_ok)
 
-        tk.Label(win, text="PetitPomo v1.0.0", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
+        tk.Label(win, text="PetitPomo  v1.0.0", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
         tk.Label(win, text="by ataruno", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
 
         # 最初にどこにフォーカスを当てるか（例: 最初のCheckbutton）
