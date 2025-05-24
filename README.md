@@ -34,10 +34,9 @@ OS: Windows 10 / 11
 ## License
 This software is released under the [MIT License](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file).  
 
-## GitHub
-https://github.com/ataruno/PetitPomo  
-The Python source code of this app is available on GitHub.  
-A PowerShell version with similar features is also included.  
+## Source code
+The [Python source code](https://github.com/ataruno/PetitPomo/tree/main/Code_Python) of this app is available on GitHub.  
+The [PowerShellScript version](https://github.com/ataruno/PetitPomo/tree/main/Code_ps1) with similar features is also included.  
 
 ## Author
 - Developer: ataruno  
@@ -70,11 +69,9 @@ OS：Windows 10 / 11
 ## ライセンス
 本ソフトウェアは[MITライセンス](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file)のもとで公開されています。  
 
-
-## Githubリンク
-https://github.com/ataruno/PetitPomo  
-GitHubでは本アプリの Python ソースコードを公開されています。  
-また、同等の機能を PowerShell スクリプトで実現したバージョンも併せて掲載しています。  
+## ソースコード
+GitHubでは本アプリの[ Python ソースコード](https://github.com/ataruno/PetitPomo/tree/main/Code_Python)を公開されています。  
+また、同等の機能を[ PowerShell スクリプトで実現したバージョン](https://github.com/ataruno/PetitPomo/tree/main/Code_ps1)も併せて掲載しています。  
 
 ## 作者情報
 - 開発者：ataruno  
