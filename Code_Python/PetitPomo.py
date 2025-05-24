@@ -316,10 +316,10 @@ class PetitPomoApp(tk.Tk):
         csv_var = tk.BooleanVar(value=self.enable_csv_logging)
 
         cb1 = tk.Checkbutton(win, text="Notify on Rest/Work", variable=notify_var)
-        cb1.pack(anchor="w", padx=10, pady=5)
+        cb1.pack(anchor="w", padx=10, pady=3)
 
         cb2 = tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var)
-        cb2.pack(anchor="w", padx=10, pady=5)
+        cb2.pack(anchor="w", padx=10, pady=3)
 
         def on_ok(event=None):  # eventを受け取れるようにする
             self.notify_on_rest = notify_var.get()
@@ -330,15 +330,12 @@ class PetitPomoApp(tk.Tk):
         btn = tk.Button(win, text=" Save ", command=on_ok, relief=tk.GROOVE)
         btn.pack(anchor="w", padx=100, pady=5)
 
-        # ↓ Checkbutton に Enter をバインド（フォーカスがあるときのみ）
         cb1.bind("<Return>", lambda e: cb1.invoke())
         cb2.bind("<Return>", lambda e: cb2.invoke())
-
-        # ↓ Button に Enter をバインド
         btn.bind("<Return>", on_ok)
 
-        # 最後のラベル（任意）
-        tk.Label(win, text="by ataruno", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=5)
+        tk.Label(win, text="PetitPomo v1.0.0", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
+        tk.Label(win, text="by ataruno", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
 
         # 最初にどこにフォーカスを当てるか（例: 最初のCheckbutton）
         cb1.focus_set()
