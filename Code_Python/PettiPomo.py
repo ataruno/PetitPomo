@@ -6,12 +6,6 @@ import time
 import threading
 import csv
 from datetime import datetime
-# try:
-#     # Windows 10以降のトースト通知用
-#     from win10toast import ToastNotifier
-#     toaster = ToastNotifier()
-# except ImportError:
-#     toaster = None
 
 CONFIG_FILE = "PettiPomo_config.json"
 LOG_FILE = "PettiPomo_log.csv"
@@ -21,7 +15,7 @@ class PettiPomoApp(tk.Tk):
         super().__init__()
 
         self.title("PettiPomo")
-        self.geometry("240x145")
+        self.geometry("145x132")
         self.resizable(False, False)
         self.configure(bg="lightgray")
         self.attributes("-topmost", True)
@@ -81,41 +75,46 @@ class PettiPomoApp(tk.Tk):
             json.dump(config, f, indent=4)
 
     def create_widgets(self):
+
+        self.label_Title = tk.Label(self, text="🍅PettiPomo", bg="lightgray", font=("Segoe UI", 10, "bold"))
+        self.label_Title.place(x=10, y=30, width=100, height=20)
+
         # Work label & entry
         self.label_work = tk.Label(self, text="Work (min)", bg="lightgray")
-        self.label_work.place(x=10, y=2, width=75, height=20)
+        self.label_work.place(x=10, y=23, width=75, height=20)
 
         self.entry_work = tk.Entry(self, width=5)
-        self.entry_work.place(x=90, y=2, width=40, height=20)
+        self.entry_work.place(x=90, y=23, width=40, height=20)
         self.entry_work.insert(0, "25")
 
         # Rest label & entry
         self.label_rest = tk.Label(self, text="Rest (min)", bg="lightgray")
-        self.label_rest.place(x=10, y=22, width=75, height=20)
+        self.label_rest.place(x=10, y=46, width=75, height=20)
 
         self.entry_rest = tk.Entry(self, width=5)
-        self.entry_rest.place(x=90, y=22, width=40, height=20)
+        self.entry_rest.place(x=90, y=47, width=40, height=20)
         self.entry_rest.insert(0, "5")
-
-        # Start button
-        self.button_start = tk.Button(self, text="Start", command=self.on_start_stop)
-        self.button_start.place(x=8, y=46, width=50, height=25)
-
-        # Reset button
-        self.button_reset = tk.Button(self, text="Reset", command=self.on_reset)
-        self.button_reset.place(x=65, y=46, width=45, height=25)
 
         # Countdown label
         self.label_countdown = tk.Label(self, text="00:00", font=("Segoe UI", 22, "bold"), bg="lightgray")
-        self.label_countdown.place(x=10, y=70, width=120, height=50)
+        self.label_countdown.place(x=10, y=87, width=120, height=50)
         self.label_countdown.configure(anchor="center")
+
+        # Start button
+        self.button_start = tk.Button(self, text="Start", command=self.on_start_stop)
+        self.button_start.place(x=8, y=72, width=50, height=25)
+
+        # Reset button
+        self.button_reset = tk.Button(self, text="Reset", command=self.on_reset)
+        self.button_reset.place(x=60, y=72, width=45, height=25)
+
 
         # Settings button (replace menu)
         self.button_settings = tk.Button(self, text="...", font=("Segoe UI", 10, "bold"), command=self.show_settings)
-        self.button_settings.place(x=110, y=45, width=25, height=25)
+        self.button_settings.place(x=110, y=72, width=25, height=25)
 
-        self.button_close = tk.Button(self, text="×", command=self.on_close, bg="red", fg="white", bd=0, font=("Segoe UI", 12, "bold"))
-        self.button_close.place(x=210, y=0, width=30, height=25)
+        self.button_close = tk.Button(self, text="×", command=self.on_close, bg="red", fg="white", bd=0, font=("Segoe UI", 10, "bold"))
+        self.button_close.place(x=123, y=0, width=22, height=22)
 
     def validate_positive_number(self, text):
         try:
@@ -134,8 +133,13 @@ class PettiPomoApp(tk.Tk):
                 return False
             self.time_left = int(work_min * 60)
             self.configure(bg="#FFB6C1")  # LightPink
-            self.label_work.configure(font=("Segoe UI", 9, "bold"))
-            self.label_rest.configure(font=("Segoe UI", 9, "normal"))
+            self.label_countdown.configure(bg="#FFB6C1")
+            self.label_work.configure(font=("Segoe UI", 10, "bold"), bg="#FFB6C1")
+            self.label_rest.configure(font=("Segoe UI", 10, "normal"), bg="#FFB6C1")
+            self.label_Title.configure(bg="#FFB6C1")
+            self.button_start.configure(bg="#FF8698")
+            self.button_reset.configure(bg="#FF8698")
+            self.button_settings.configure(bg="#FF8698")
             now = datetime.now()
             self.log_data["WorkStart"] = now.strftime("%H:%M:%S")
             self.log_data["Date"] = now.strftime("%Y-%m-%d")
@@ -144,14 +148,21 @@ class PettiPomoApp(tk.Tk):
                 return False
             self.time_left = int(rest_min * 60)
             self.configure(bg="#90EE90")  # LightGreen
-            self.label_work.configure(font=("Segoe UI", 9, "normal"))
-            self.label_rest.configure(font=("Segoe UI", 9, "bold"))
+            self.label_countdown.configure(bg="#90EE90")
+            self.label_work.configure(font=("Segoe UI", 10, "normal"), bg="#90EE90")
+            self.label_rest.configure(font=("Segoe UI", 10, "bold"), bg="#90EE90")
+            self.label_Title.configure(bg="#90EE90")
+            self.button_start.configure(bg="#5DD65D")
+            self.button_reset.configure(bg="#5DD65D")
+            self.button_settings.configure(bg="#5DD65D")
+
             now = datetime.now()
             self.log_data["WorkEnd"] = now.strftime("%H:%M:%S")
             self.log_data["RestStart"] = now.strftime("%H:%M:%S")
         else:
             return False
         return True
+
 
     def update_countdown_label(self):
         minutes = self.time_left // 60
@@ -160,15 +171,15 @@ class PettiPomoApp(tk.Tk):
 
     def update_label_fonts(self):
         if not self.running:
-            self.label_work.configure(font=("Segoe UI", 9, "normal"))
-            self.label_rest.configure(font=("Segoe UI", 9, "normal"))
+            self.label_work.configure(font=("Segoe UI", 10, "normal"))
+            self.label_rest.configure(font=("Segoe UI", 10, "normal"))
         else:
             if self.phase == "work":
-                self.label_work.configure(font=("Segoe UI", 9, "bold"))
-                self.label_rest.configure(font=("Segoe UI", 9, "normal"))
+                self.label_work.configure(font=("Segoe UI", 10, "bold"))
+                self.label_rest.configure(font=("Segoe UI", 10, "normal"))
             elif self.phase == "rest":
-                self.label_work.configure(font=("Segoe UI", 9, "normal"))
-                self.label_rest.configure(font=("Segoe UI", 9, "bold"))
+                self.label_work.configure(font=("Segoe UI", 10, "normal"))
+                self.label_rest.configure(font=("Segoe UI", 10, "bold"))
 
     def log_session_to_csv(self):
         self.log_data["RestEnd"] = datetime.now().strftime("%H:%M:%S")
@@ -266,12 +277,20 @@ class PettiPomoApp(tk.Tk):
         self.button_start.config(text="Start")
         self.configure(bg="lightgray")
         self.update_label_fonts()
+        self.configure(bg="lightgray")  # LightGreen
+        self.label_countdown.configure(bg="lightgray")
+        self.label_Title.configure(bg="lightgray")
+        self.label_work.configure(font=("Segoe UI", 10, "normal"), bg="lightgray")
+        self.label_rest.configure(font=("Segoe UI", 10, "normal"), bg="lightgray")
+        self.button_start.configure(bg="lightgray")
+        self.button_reset.configure(bg="lightgray")
+        self.button_settings.configure(bg="lightgray")
 
     def show_settings(self):
         # シンプルな設定ダイアログ
         win = tk.Toplevel(self)
         win.title("Settings")
-        win.geometry("200x120")
+        win.geometry("250x150")
         win.resizable(False, False)
         win.grab_set()
 
@@ -280,14 +299,13 @@ class PettiPomoApp(tk.Tk):
 
         tk.Checkbutton(win, text="Notify on rest", variable=notify_var).pack(anchor="w", padx=10, pady=5)
         tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var).pack(anchor="w", padx=10, pady=5)
-
         def on_ok():
             self.notify_on_rest = notify_var.get()
             self.enable_csv_logging = csv_var.get()
             self.save_config()
             win.destroy()
-
-        tk.Button(win, text="OK", command=on_ok).pack(pady=10)
+        tk.Button(win, text="Save", command=on_ok).pack(anchor="w", padx=100, pady=5)
+        tk.Label(win, text="ataruno", font=("Segoe UI", 8)).pack(anchor="w", padx=100, pady=5)
 
     def on_close(self):
         self.running = False
