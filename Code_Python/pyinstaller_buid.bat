@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --icon=PettiPomoIco.ico PettiPomo.py

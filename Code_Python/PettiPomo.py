@@ -24,6 +24,7 @@ class PettiPomoApp(tk.Tk):
         self._offset_y = 0
         self.bind("<ButtonPress-1>", self.start_move)
         self.bind("<B1-Motion>", self.do_move)
+        # self.bind("<Return>", self.on_enter_key)
         # 状態変数
         self.phase = ""
         self.time_left = 0
@@ -75,9 +76,11 @@ class PettiPomoApp(tk.Tk):
             json.dump(config, f, indent=4)
 
     def create_widgets(self):
+        self.tomato_Title = tk.Label(self, text="🍅", bg="lightgray", font=("Segoe UI", 10, "bold"))
+        self.tomato_Title.place(x=5, y=0, width=15, height=20)
 
-        self.label_Title = tk.Label(self, text="🍅PettiPomo", bg="lightgray", font=("Segoe UI", 10, "bold"))
-        self.label_Title.place(x=10, y=30, width=100, height=20)
+        self.label_Title = tk.Label(self, text="PettiPomo", bg="lightgray", font=("Segoe UI", 10, "bold"))
+        self.label_Title.place(x=20, y=1, width=80, height=20)
 
         # Work label & entry
         self.label_work = tk.Label(self, text="Work (min)", bg="lightgray")
@@ -97,24 +100,28 @@ class PettiPomoApp(tk.Tk):
 
         # Countdown label
         self.label_countdown = tk.Label(self, text="00:00", font=("Segoe UI", 22, "bold"), bg="lightgray")
-        self.label_countdown.place(x=10, y=87, width=120, height=50)
+        self.label_countdown.place(x=13, y=87, width=120, height=50)
         self.label_countdown.configure(anchor="center")
 
         # Start button
-        self.button_start = tk.Button(self, text="Start", command=self.on_start_stop)
+        self.button_start = tk.Button(self, text="Start", command=self.on_start_stop, relief=tk.GROOVE)
         self.button_start.place(x=8, y=72, width=50, height=25)
+        self.button_start.bind("<Return>", lambda event: self.button_start.invoke())
 
         # Reset button
-        self.button_reset = tk.Button(self, text="Reset", command=self.on_reset)
+        self.button_reset = tk.Button(self, text="Reset", command=self.on_reset, relief=tk.GROOVE)
         self.button_reset.place(x=60, y=72, width=45, height=25)
-
+        self.button_reset.bind("<Return>", lambda event: self.button_reset.invoke())
 
         # Settings button (replace menu)
-        self.button_settings = tk.Button(self, text="...", font=("Segoe UI", 10, "bold"), command=self.show_settings)
+        self.button_settings = tk.Button(self, text="...", font=("Segoe UI", 10, "bold"), command=self.show_settings, relief=tk.GROOVE)
         self.button_settings.place(x=110, y=72, width=25, height=25)
+        self.button_settings.bind("<Return>", lambda event: self.button_settings.invoke())
 
-        self.button_close = tk.Button(self, text="×", command=self.on_close, bg="red", fg="white", bd=0, font=("Segoe UI", 10, "bold"))
-        self.button_close.place(x=123, y=0, width=22, height=22)
+        self.button_close = tk.Button(self, text="×", command=self.on_close, bg="gray", fg="white", bd=0, font=("Segoe UI", 10, "bold"))
+        self.button_close.place(x=123, y=0, width=22, height=20)
+        self.button_close.bind("<Return>", lambda event: self.button_close.invoke())
+
 
     def validate_positive_number(self, text):
         try:
@@ -136,10 +143,12 @@ class PettiPomoApp(tk.Tk):
             self.label_countdown.configure(bg="#FFB6C1")
             self.label_work.configure(font=("Segoe UI", 10, "bold"), bg="#FFB6C1")
             self.label_rest.configure(font=("Segoe UI", 10, "normal"), bg="#FFB6C1")
-            self.label_Title.configure(bg="#FFB6C1")
+            self.tomato_Title.configure(bg="#FFB6C1",fg="red")
+            self.label_Title.configure(bg="#FFB6C1",fg="red")
             self.button_start.configure(bg="#FF8698")
             self.button_reset.configure(bg="#FF8698")
             self.button_settings.configure(bg="#FF8698")
+            self.button_close.configure(bg="#FF8698", fg="black")
             now = datetime.now()
             self.log_data["WorkStart"] = now.strftime("%H:%M:%S")
             self.log_data["Date"] = now.strftime("%Y-%m-%d")
@@ -151,10 +160,12 @@ class PettiPomoApp(tk.Tk):
             self.label_countdown.configure(bg="#90EE90")
             self.label_work.configure(font=("Segoe UI", 10, "normal"), bg="#90EE90")
             self.label_rest.configure(font=("Segoe UI", 10, "bold"), bg="#90EE90")
-            self.label_Title.configure(bg="#90EE90")
+            self.tomato_Title.configure(bg="#90EE90",fg="green")
+            self.label_Title.configure(bg="#90EE90",fg="green")
             self.button_start.configure(bg="#5DD65D")
             self.button_reset.configure(bg="#5DD65D")
             self.button_settings.configure(bg="#5DD65D")
+            self.button_close.configure(bg="#5DD65D", fg="black")
 
             now = datetime.now()
             self.log_data["WorkEnd"] = now.strftime("%H:%M:%S")
@@ -207,7 +218,12 @@ class PettiPomoApp(tk.Tk):
         popup.geometry("250x100+{}+{}".format(self.winfo_x() + 100, self.winfo_y() + 100))
         popup.attributes("-topmost", True)
         popup.resizable(False, False)
-        label = tk.Label(popup, text=message, font=("Segoe UI", 11))
+        if self.phase == "rest":
+            popup.configure(bg='#90EE90')
+            label = tk.Label(popup, text=message, font=("Segoe UI", 11),bg='#90EE90')
+        else:
+            popup.configure(bg='#FFB6C1')
+            label = tk.Label(popup, text=message, font=("Segoe UI", 11),bg='#FFB6C1')
         label.pack(expand=True, fill="both", padx=20, pady=20)
         # 5秒後に閉じる
         popup.after(5000, popup.destroy)
@@ -279,12 +295,14 @@ class PettiPomoApp(tk.Tk):
         self.update_label_fonts()
         self.configure(bg="lightgray")  # LightGreen
         self.label_countdown.configure(bg="lightgray")
-        self.label_Title.configure(bg="lightgray")
+        self.tomato_Title.configure(bg="lightgray",fg="black")
+        self.label_Title.configure(bg="lightgray",fg="black")
         self.label_work.configure(font=("Segoe UI", 10, "normal"), bg="lightgray")
         self.label_rest.configure(font=("Segoe UI", 10, "normal"), bg="lightgray")
         self.button_start.configure(bg="lightgray")
         self.button_reset.configure(bg="lightgray")
         self.button_settings.configure(bg="lightgray")
+        self.button_close.configure(bg="gray")
 
     def show_settings(self):
         # シンプルな設定ダイアログ
@@ -297,15 +315,33 @@ class PettiPomoApp(tk.Tk):
         notify_var = tk.BooleanVar(value=self.notify_on_rest)
         csv_var = tk.BooleanVar(value=self.enable_csv_logging)
 
-        tk.Checkbutton(win, text="Notify on rest", variable=notify_var).pack(anchor="w", padx=10, pady=5)
-        tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var).pack(anchor="w", padx=10, pady=5)
-        def on_ok():
+        cb1 = tk.Checkbutton(win, text="Notify on rest", variable=notify_var)
+        cb1.pack(anchor="w", padx=10, pady=5)
+
+        cb2 = tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var)
+        cb2.pack(anchor="w", padx=10, pady=5)
+
+        def on_ok(event=None):  # eventを受け取れるようにする
             self.notify_on_rest = notify_var.get()
             self.enable_csv_logging = csv_var.get()
             self.save_config()
             win.destroy()
-        tk.Button(win, text="Save", command=on_ok).pack(anchor="w", padx=100, pady=5)
+
+        btn = tk.Button(win, text="Save", command=on_ok, relief=tk.GROOVE)
+        btn.pack(anchor="w", padx=100, pady=5)
+
+        # ↓ Checkbutton に Enter をバインド（フォーカスがあるときのみ）
+        cb1.bind("<Return>", lambda e: cb1.invoke())
+        cb2.bind("<Return>", lambda e: cb2.invoke())
+
+        # ↓ Button に Enter をバインド
+        btn.bind("<Return>", on_ok)
+
+        # 最後のラベル（任意）
         tk.Label(win, text="ataruno", font=("Segoe UI", 8)).pack(anchor="w", padx=100, pady=5)
+
+        # 最初にどこにフォーカスを当てるか（例: 最初のCheckbutton）
+        cb1.focus_set()
 
     def on_close(self):
         self.running = False

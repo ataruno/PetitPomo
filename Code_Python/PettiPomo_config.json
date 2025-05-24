@@ -1,4 +1,4 @@
 {
-    "NotifyOnRest": true,
-    "EnableCsvLogging": true
+    "NotifyOnRest": false,
+    "EnableCsvLogging": false
 }
