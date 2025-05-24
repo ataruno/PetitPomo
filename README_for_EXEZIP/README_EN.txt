@@ -33,8 +33,8 @@ See the included `LICENSE.txt` file for details.
 
 ## GitHub
 https://github.com/ataruno/PetitPomo
-The Python source code of this app is available on GitHub.
-A PowerShell version with similar features is also included.
+The Python source code for this app is available on GitHub.
+A PowerShell script version with similar features is also available.
 
 ## Author
 - Developer: ataruno

@@ -33,7 +33,7 @@ OS：Windows 10 / 11
 
 ## Githubリンク
 https://github.com/ataruno/PetitPomo
-GitHubでは本アプリの Python ソースコードを公開されています。
+GitHubでは本アプリの Python ソースコードを公開しています。
 また、同等の機能を PowerShell スクリプトで実現したバージョンも併せて掲載しています。
 
 ## 作者情報
