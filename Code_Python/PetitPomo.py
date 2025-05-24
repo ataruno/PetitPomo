@@ -315,7 +315,7 @@ class PetitPomoApp(tk.Tk):
         notify_var = tk.BooleanVar(value=self.notify_on_rest)
         csv_var = tk.BooleanVar(value=self.enable_csv_logging)
 
-        cb1 = tk.Checkbutton(win, text="Notify on rest", variable=notify_var)
+        cb1 = tk.Checkbutton(win, text="Notify on Rest/Work", variable=notify_var)
         cb1.pack(anchor="w", padx=10, pady=5)
 
         cb2 = tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var)
