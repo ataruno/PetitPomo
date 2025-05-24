@@ -3,7 +3,7 @@
 PetitPomo is a simple and lightweight Pomodoro timer.  
 It automatically switches between Work and Rest periods to help you stay focused.  
 
-※日本語のREADMEは後半に記載  
+※[日本語のREADME](https://github.com/ataruno/PetitPomo?tab=readme-ov-file#japanese)は後半に記載  
 PetitPomo（プティポモ）は、シンプルで小さなポモドーロタイマーです。  
 作業(Work)と休憩(Rest)を自動で切り替え、集中力の維持をサポートします。  
 
