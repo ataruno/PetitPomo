@@ -23,7 +23,11 @@ if (Test-Path $configPath) {
 # Create main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "PettiPomo"
-$form.Size = New-Object System.Drawing.Size(110,145)
+$form.WindowState = 'Normal'
+$form.AutoScaleMode = "None"
+$form.MinimumSize = New-Object System.Drawing.Size(25, 25)
+$form.ClientSize = New-Object System.Drawing.Size(20, 145)
+$form.Size = New-Object System.Drawing.Size(70,145)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.BackColor = [System.Drawing.Color]::LightGray
@@ -54,7 +58,8 @@ $notifyIcon.Visible = $false
 $labelWork = New-Object System.Windows.Forms.Label
 $labelWork.Text = "Work (min)"
 $labelWork.Location = New-Object System.Drawing.Point(10,2)
-$labelWork.AutoSize = $true
+$labelWork.Size = New-Object System.Drawing.Size(75,20)
+# $labelWork.AutoSize = $true
 $form.Controls.Add($labelWork)
 
 $textWork = New-Object System.Windows.Forms.TextBox
@@ -67,7 +72,8 @@ $form.Controls.Add($textWork)
 $labelRest = New-Object System.Windows.Forms.Label
 $labelRest.Text = "Rest (min)"
 $labelRest.Location = New-Object System.Drawing.Point(10,22)
-$labelRest.AutoSize = $true
+$labelRest.Size = New-Object System.Drawing.Size(75,20)
+# $labelRest.AutoSize = $true
 $form.Controls.Add($labelRest)
 
 $textRest = New-Object System.Windows.Forms.TextBox
