@@ -1,13 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
-import json
-import time
 import threading
-import csv
-from datetime import datetime
-
-CONFIG_FILE = "PetitPomo_config.json"
-LOG_FILE = "PetitPomo_log.csv"
+import time
 
 class PetitPomoApp(tk.Tk):
     def __init__(self):
@@ -23,22 +17,12 @@ class PetitPomoApp(tk.Tk):
         self._offset_y = 0
         self.bind("<ButtonPress-1>", self.start_move)
         self.bind("<B1-Motion>", self.do_move)
-        # self.bind("<Return>", self.on_enter_key)
+
         # 状態変数
         self.phase = ""
         self.time_left = 0
         self.running = False
-        self.notify_on_rest = False
-        self.enable_csv_logging = False
-        self.log_data = {
-            "Date": "",
-            "WorkStart": "",
-            "WorkEnd": "",
-            "RestStart": "",
-            "RestEnd": ""
-        }
-
-        self.load_config()
+        self.notify_on_rest = True
 
         # UI作成
         self.create_widgets()
@@ -46,7 +30,6 @@ class PetitPomoApp(tk.Tk):
         # タイマー用スレッド
         self.timer_thread = None
         self.timer_stop_event = threading.Event()
-
         self.update_label_fonts()
         self.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -58,24 +41,6 @@ class PetitPomoApp(tk.Tk):
         x = self.winfo_pointerx() - self._offset_x
         y = self.winfo_pointery() - self._offset_y
         self.geometry(f"+{x}+{y}")
-
-    def load_config(self):
-        try:
-            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                config = json.load(f)
-                self.notify_on_rest = config.get("NotifyOnRest", False)
-                self.enable_csv_logging = config.get("EnableCsvLogging", False)
-        except FileNotFoundError:
-            # ファイルがなければ何もしない（またはデフォルト値のまま）
-            pass
-
-    def save_config(self):
-        config = {
-            "NotifyOnRest": self.notify_on_rest,
-            "EnableCsvLogging": self.enable_csv_logging
-        }
-        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(config, f, indent=4)
 
     def create_widgets(self):
         self.tomato_Title = tk.Label(self, text="🍅", bg="lightgray", font=("Segoe UI", 10, "bold"))
@@ -124,7 +89,6 @@ class PetitPomoApp(tk.Tk):
         self.button_close.place(x=123, y=0, width=22, height=20)
         self.button_close.bind("<Return>", lambda event: self.button_close.invoke())
 
-
     def validate_positive_number(self, text):
         try:
             num = float(text)
@@ -151,9 +115,6 @@ class PetitPomoApp(tk.Tk):
             self.button_reset.configure(bg="#FF8698")
             self.button_settings.configure(bg="#FF8698")
             self.button_close.configure(bg="#FF8698", fg="black")
-            now = datetime.now()
-            self.log_data["WorkStart"] = now.strftime("%H:%M:%S")
-            self.log_data["Date"] = now.strftime("%Y-%m-%d")
         elif self.phase == "rest":
             if rest_min is None:
                 return False
@@ -168,14 +129,9 @@ class PetitPomoApp(tk.Tk):
             self.button_reset.configure(bg="#5DD65D")
             self.button_settings.configure(bg="#5DD65D")
             self.button_close.configure(bg="#5DD65D", fg="black")
-
-            now = datetime.now()
-            self.log_data["WorkEnd"] = now.strftime("%H:%M:%S")
-            self.log_data["RestStart"] = now.strftime("%H:%M:%S")
         else:
             return False
         return True
-
 
     def update_countdown_label(self):
         minutes = self.time_left // 60
@@ -193,27 +149,6 @@ class PetitPomoApp(tk.Tk):
             elif self.phase == "rest":
                 self.label_work.configure(font=("Segoe UI", 10, "normal"))
                 self.label_rest.configure(font=("Segoe UI", 10, "bold"))
-
-    def log_session_to_csv(self):
-        self.log_data["RestEnd"] = datetime.now().strftime("%H:%M:%S")
-        try:
-            with open(LOG_FILE, "r", encoding="utf-8") as f:
-                file_exists = True
-        except FileNotFoundError:
-            file_exists = False
-
-        with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            if not file_exists:
-                writer.writerow(["Date", "WorkStart", "WorkEnd", "RestStart", "RestEnd", "Memo"])
-            writer.writerow([
-                self.log_data.get("Date", ""),
-                self.log_data.get("WorkStart", ""),
-                self.log_data.get("WorkEnd", ""),
-                self.log_data.get("RestStart", ""),
-                self.log_data.get("RestEnd", ""),
-                ""
-            ])
 
     def show_notification(self, title, message):
         if not self.notify_on_rest:
@@ -242,10 +177,6 @@ class PetitPomoApp(tk.Tk):
                     self.time_left -= 1
                     self.after(0, self.update_countdown_label)
                 else:
-                    # 時間切れ
-                    if self.phase == "rest" and self.enable_csv_logging:
-                        self.log_session_to_csv()
-
                     self.phase = "rest" if self.phase == "work" else "work"
 
                     if self.phase == "rest":
@@ -320,25 +251,18 @@ class PetitPomoApp(tk.Tk):
         win.grab_set()
 
         notify_var = tk.BooleanVar(value=self.notify_on_rest)
-        csv_var = tk.BooleanVar(value=self.enable_csv_logging)
 
         cb1 = tk.Checkbutton(win, text="Notify on Rest/Work", variable=notify_var)
         cb1.pack(anchor="w", padx=10, pady=3)
 
-        cb2 = tk.Checkbutton(win, text="Enable CSV logging", variable=csv_var)
-        cb2.pack(anchor="w", padx=10, pady=3)
-
-        def on_ok(event=None):  # eventを受け取れるようにする
+        def on_ok(event=None):
             self.notify_on_rest = notify_var.get()
-            self.enable_csv_logging = csv_var.get()
-            self.save_config()
             win.destroy()
 
-        btn = tk.Button(win, text=" Save ", command=on_ok, relief=tk.GROOVE)
+        btn = tk.Button(win, text=" OK ", command=on_ok, relief=tk.GROOVE)
         btn.pack(anchor="w", padx=100, pady=5)
 
         cb1.bind("<Return>", lambda e: cb1.invoke())
-        cb2.bind("<Return>", lambda e: cb2.invoke())
         btn.bind("<Return>", on_ok)
 
         tk.Label(win, text="PetitPomo  v1.0.0", font=("Segoe UI", 8)).pack(anchor="w", padx=80, pady=1)
@@ -350,7 +274,6 @@ class PetitPomoApp(tk.Tk):
     def on_close(self):
         self.running = False
         self.timer_stop_event.set()
-        self.save_config()
         self.destroy()
 
 if __name__ == "__main__":

@@ -1,1 +1,1 @@
-pyinstaller --onefile --windowed --icon=PetitPomoIco.ico PetitPomo.py
+pyinstaller --onefile --windowed --noupx --icon=PetitPomoIco.ico PetitPomo_forEXE.py
