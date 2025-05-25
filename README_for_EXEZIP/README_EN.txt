@@ -28,7 +28,7 @@ It automatically switches between Work and Rest periods to help you stay focused
 OS: Windows 10 / 11
 
 ## License
-This software is released under the MIT License.
+This software is released under the THE COFFEE-WARE LICENSE.
 See the included `LICENSE.txt` file for details.
 
 ## GitHub
