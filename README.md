@@ -1,4 +1,5 @@
-# PetitPomo
+# ![](./README_image/PetitPomoIco.png) PetitPomo 
+
 ## Overview
 PetitPomo is a simple and lightweight Pomodoro timer.  
 It automatically switches between Work and Rest periods to help you stay focused.  
@@ -29,15 +30,19 @@ Download PetitPomo.zip from the [Releases page](https://github.com/ataruno/Petit
 
 ## Settings
 - Click […] to open the settings window.  
+![](./README_image/Setting.png)  
 - Settings are saved in PetitPomo_config.json (the file is automatically created if it does not exist).  
+![](./README_image/configfile.png)  
 - Enable "Notify on Rest/Work" to show a 5-second popup notification when each session ends.  
+![](./README_image/popup.png)  
 - Enable "Enable CSV logging" to automatically export logs to `PetitPomo_log.csv` at the end of each Rest session.  
+![](./README_image/logfile.png)
 
 ## Tested Environment
 OS: Windows 10 / 11  
 
 ## License
-This software is released under the [MIT License](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file).  
+This software is released under the [THE COFFEE-WARE LICENSE](https://github.com/ataruno/PetitPomo?tab=License-1-ov-file).  
 
 ## Source code
 The [Python source code](https://github.com/ataruno/PetitPomo/tree/main/Code_Python) of this app is available on GitHub.  
@@ -67,15 +72,19 @@ GitHubの[Releaseページ](https://github.com/ataruno/PetitPomo/releases)から
 
 ## 設定
 - […]をクリックすると設定画面が開きます。  
+![](./README_image/Setting.png)  
 - 設定内容は 'PetitPomo_config.json' に保存されます（ファイルがない場合は自動で生成されます）。  
+![](./README_image/configfile.png)  
 - 「Notify on Rest/Work」にチェックを入れると、各時間終了時にポップアップ通知が5秒間表示されます。  
+![](./README_image/popup.png)  
 - 「Enable CSV logging」にチェックを入れると、Rest 終了時に `PetitPomo_log.csv` へログが出力されます。  
+![](./README_image/logfile.png)  
 
 ## 動作確認済の環境
 OS：Windows 10 / 11  
 
 ## ライセンス
-本ソフトウェアは[MITライセンス](https://github.com/ataruno/PetitPomo?tab=MIT-1-ov-file)のもとで公開されています。  
+本ソフトウェアは[THE COFFEE-WARE LICENSE](https://github.com/ataruno/PetitPomo?tab=License-1-ov-file)のもとで公開されています。  
 
 ## ソースコード
 GitHubでは本アプリの[ Python ソースコード](https://github.com/ataruno/PetitPomo/tree/main/Code_Python)を公開されています。  
