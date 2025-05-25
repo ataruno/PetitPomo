@@ -1,4 +1,4 @@
-# ![](./README_image/PetitPomoIco.png) PetitPomo 
+# ![](./README_image/PetitPomoReadme.png) PetitPomo 
 
 ## Overview
 PetitPomo is a simple and lightweight Pomodoro timer.  
